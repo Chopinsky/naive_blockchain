@@ -1,0 +1,8 @@
+[package]
+name = "naive-blockchain"
+version = "0.1.0"
+authors = ["Jacob Zuo <jacob.dzwo@gmail.com>"]
+
+[dependencies]
+rust-crypto = "^0.2"
+rand = "^0.3"
