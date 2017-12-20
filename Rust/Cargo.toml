@@ -6,3 +6,4 @@ authors = ["Jacob Zuo <jacob.dzwo@gmail.com>"]
 [dependencies]
 rust-crypto = "^0.2"
 rand = "^0.3"
+# openssl = "0.9.23"
