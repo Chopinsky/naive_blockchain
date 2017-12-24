@@ -29,6 +29,9 @@ cmake-build-debug/
 # File-based project format:
 *.iws
 
+# Crypto
+keys
+.pem
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
