@@ -50,12 +50,16 @@ public class CryptoWallet {
         }
     }
 
-    public PublicKey GetPublicKey() {
+    public PublicKey GetAddress() {
         if (cryptoWallet != null) {
             return cryptoWallet.getPublic();
         } else {
             return null;
         }
+    }
+
+    public byte[] Sign(String message) {
+        return new byte[]{};
     }
 
     private void initWalletFromKeys(String publicPath, String privatePath)
@@ -81,6 +85,7 @@ public class CryptoWallet {
             PrivateKey privateKey = kf.generatePrivate(privateSpec);
 
             cryptoWallet = new KeyPair(publicKey, privateKey);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
