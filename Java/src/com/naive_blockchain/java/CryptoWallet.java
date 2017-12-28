@@ -11,6 +11,7 @@ import java.security.spec.X509EncodedKeySpec;
 
 public class CryptoWallet {
     private KeyPair cryptoWallet;
+    private Signature cryptoSigner;
 
     public CryptoWallet() {
         String publicKeyPath = WalletUtils.DEFAULT_PUBLIC_KEY_PATH;
@@ -40,13 +41,13 @@ public class CryptoWallet {
         }
     }
 
-    public boolean CreateNewWallet() {
+    public static CryptoWallet CreateNewWallet() {
         try {
-            cryptoWallet = WalletUtils.createWallet(2048, "", "");
-            return true;
+            KeyPair wallet = WalletUtils.createWallet(2048, "", "");
+            return new CryptoWallet(wallet);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -59,7 +60,53 @@ public class CryptoWallet {
     }
 
     public byte[] Sign(String message) {
-        return new byte[]{};
+        Signature signer = this.getSigner();
+        if (signer == null) return null;
+
+        try {
+            signer.initSign(cryptoWallet.getPrivate());
+
+            // append message
+            signer.update(message.getBytes());
+            return signer.sign();
+
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            return null;
+        } catch (SignatureException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean Verify(String message, byte[] signatures) {
+        Signature signer = this.getSigner();
+        if (signer == null) return false;
+
+        try {
+            signer.initVerify(cryptoWallet.getPublic());
+            signer.update(message.getBytes());
+            return signer.verify(signatures);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            return false;
+        } catch (SignatureException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private Signature getSigner() {
+        if (cryptoSigner == null) {
+            try {
+                cryptoSigner = Signature.getInstance("SHA512withRSA");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        return cryptoSigner;
     }
 
     private void initWalletFromKeys(String publicPath, String privatePath)
