@@ -24,4 +24,8 @@ public class TransactionInput {
         TransactionOutput output = this._source.getOutput(this._outputIndex);
         return output.getAmount();
     }
+
+    public double GetIncomeFromSource(CryptoWallet wallet) {
+        return this._source.PaymentFromSource(wallet);
+    }
 }

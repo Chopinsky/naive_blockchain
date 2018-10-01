@@ -17,4 +17,8 @@ public class TransactionOutput {
     public double getAmount() {
         return this._amount;
     }
+
+    public String GetAddress() {
+        return this._address;
+    }
 }

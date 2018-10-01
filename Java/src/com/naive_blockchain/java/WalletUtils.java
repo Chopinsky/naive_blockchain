@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.*;
+import java.util.ArrayList;
 
 public class WalletUtils {
 
     static final String DEFAULT_PUBLIC_KEY_PATH = "./keys/public.pem";
     static final String DEFAULT_PRIVATE_KEY_PATH = "./keys/private.pem";
 
-    public static KeyPair createWallet(int keySize, String publicPath, String privatePath) throws NoSuchAlgorithmException {
+    public static KeyPair CreateWallet(int keySize, String publicPath, String privatePath) throws NoSuchAlgorithmException {
         if (keySize < 2048) keySize = 2048;
 
         publicPath = publicPath.isEmpty() ? DEFAULT_PUBLIC_KEY_PATH : publicPath;
@@ -33,6 +34,16 @@ public class WalletUtils {
         }
 
         return wallet;
+    }
+
+    public double ComputeBalance(CryptoWallet wallet, ArrayList<Transaction> transactions) {
+        double balance = 0;
+
+        for (Transaction t: transactions) {
+            balance += t.ComputeBalance(wallet);
+        }
+
+        return balance;
     }
 
     private static void wrtieKeyToFile(String path, byte[] rawKey) {

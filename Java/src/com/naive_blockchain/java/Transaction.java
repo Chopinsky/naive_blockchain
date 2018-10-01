@@ -52,6 +52,10 @@ public class Transaction {
         this._signature = owner.Sign(this.toString(false));
     }
 
+    public double ComputeBalance(CryptoWallet wallet) {
+        return  this.incomeFromSource(wallet) - this.paymentFromSource(wallet);
+    }
+
     public String toString(boolean includeSignature) {
         StringBuilder inputsBuilder = new StringBuilder();
         for (TransactionInput input : this._inputs) {
@@ -101,5 +105,27 @@ public class Transaction {
         }
 
         return this._outputs.get(index);
+    }
+
+    private double paymentFromSource(CryptoWallet wallet) {
+        double payment = 0;
+
+        for (TransactionOutput p: this._outputs) {
+            if (p.GetAddress().equals(wallet.GetAddressString())) {
+                payment += p.getAmount();
+            }
+        }
+
+        return payment;
+    }
+
+    private double incomeFromSource(CryptoWallet wallet) {
+        double income = 0;
+
+        for (TransactionInput i: this._inputs) {
+            income += i.GetIncomeFromSource(wallet);
+        }
+
+        return income;
     }
 }

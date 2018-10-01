@@ -43,7 +43,7 @@ public class CryptoWallet {
 
     public static CryptoWallet CreateNewWallet() {
         try {
-            KeyPair wallet = WalletUtils.createWallet(2048, "", "");
+            KeyPair wallet = WalletUtils.CreateWallet(2048, "", "");
             return new CryptoWallet(wallet);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -56,6 +56,14 @@ public class CryptoWallet {
             return cryptoWallet.getPublic();
         } else {
             return null;
+        }
+    }
+
+    public String GetAddressString() {
+        if (cryptoWallet != null) {
+            return cryptoWallet.getPublic().toString();
+        } else {
+            return "";
         }
     }
 
